@@ -1,0 +1,23 @@
+{
+    "main": {
+        "current": "",
+        "prio": [],
+        "normal": []
+    },
+    "add": {
+        "current": "",
+        "prio": [],
+        "normal": []
+    },
+    "timer": {
+        "started": -1,
+        "current": 120
+    },
+    "settings": {
+        "title": "Hauptantrag",
+        "main_closed": false,
+        "add_closed": false,
+        "time_minutes": 2,
+        "time_seconds": 0
+    }
+}

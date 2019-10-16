@@ -1,0 +1,46 @@
+body {
+}
+
+.logo {
+	background-image: url("../im/logo.png");
+	background-attachment: fixed;
+	background-position: left bottom;
+	background-repeat: no-repeat;
+	background-size: 20vmax;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -999;
+}
+
+.logo.logo-weiss {
+	background-image: url("../im/logo-white.png") !important;
+}
+
+.redetab {
+	background-color: white;
+	text-transform: capitalize;
+}
+
+.activered {
+	font-weight: bold;
+}
+
+.adminredtab  h1 {
+	font-size: 2rem !important;
+}
+
+.lnk {
+	cursor: pointer;
+}
+
+a, a:hover, a:active, a:visited {
+	text-decoration: none;
+	color: inherit;
+}
+
+a:hover {
+	color: #868e96;
+}

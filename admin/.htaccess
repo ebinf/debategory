@@ -1,0 +1,4 @@
+AuthName "Debategory Admin"
+AuthType Basic
+AuthUserFile /var/www/html/debategory/admin/.htusers
+Require valid-user

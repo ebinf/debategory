@@ -1,0 +1,15 @@
+{
+    "main": [],
+    "add": [],
+    "timer": {
+        "started": 0,
+        "current": 0
+    },
+    "settings": {
+        "title": "Hauptantrag",
+        "main_closed": false,
+        "add_closed": false,
+        "time_minutes": 2,
+        "time_seconds": 0
+    }
+}
