@@ -22,6 +22,7 @@ $.ajaxSetup({
 				$("#normalCnt").hide();
 				clearInterval(interv);
 				interv = -1;
+				setTimeout(function() { location.reload(); }, 60000);
 			} else {
 				tit.html(lst["title"]);
 				inf.hide();

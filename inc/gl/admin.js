@@ -286,23 +286,23 @@ function checkforupdates() {
 		method: "GET",
 		complete: function(data) {
 			data = data.responseJSON;
-			if (data["status"] == "error") {
+			if (data["status"] == "update") {
+				$("#updateseed").val(data["seed"]);
+				$("#updatedialog").modal("show");
+				$("#updatedialogNew").html(data["version"]);
+				$("#updatedialogChn").html("");
+				for (var i = 0; i < data["changes"].length; i++) {
+					$("#updatedialogChn").append("<li>" + data["changes"][i] + "</li>");
+				}
+			} else if (data["status"] == "no updates") {
+				$("#noupdateMsg").show();
+			} else {
 				if (data["message"] == undefined) {
 					$("#updateerrorLbl").html(l("Unknown error."));
 				} else {
 					$("#updateerrorLbl").html(data["message"]);
 				}
 				$("#updateerrorMsg").show();
-			} else if (data["status"] == "no updates") {
-				$("#noupdateMsg").show();
-			} else {
-				$("#updatedialogNew").html(data["version"]);
-				$("#updatedialogChn").html("");
-				for (var i = 0; i < data["changes"].length; i++) {
-					$("#updatedialogChn").append("<li>" + data["changes"][i] + "</li>");
-				}
-				$("#updateseed").val(data["seed"]);
-				$("#updatedialog").modal("show");
 			}
 			$("#about").modal("hide");
 			$("#checkforupdatesBtn").show();

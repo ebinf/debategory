@@ -197,7 +197,9 @@
 					$versionsinfo = curl_exec($ch);
 					curl_close($ch);
 					$versionsinfo = json_decode($versionsinfo, true);
-					if ($versionsinfo["tag_name"] == $versioning["tag"]) {
+					if (is_null($versionsinfo) || !isset($versionsinfo{"tag_name"}) || empty($versionsinfo["tag_name"])) {
+						echo json_encode(["status" => "error", "message" => $e]);
+					} elseif ($versionsinfo["tag_name"] == $versioning["tag"]) {
 						echo json_encode(["status" => "no updates"]);
 					} else {
 						$seed = md5($versionsinfo["name"] . time());
@@ -387,9 +389,9 @@
 					</div>
 					<div class="modal-body">
 						<h2>Debategory <small class="text-muted"><?=$versioning["name"]?></small></h2>
-						<p><a href="https://github.com/ebinf/debategory" target="_blank">Debategory</a> is free software licensed under the <a href="https://github.com/ebinf/debategory/blob/master/LICENSE" target="_blank">MIT License</a>.</p>
+						<p><a href="https://github.com/ebinf/debategory" target="_blank">Debategory</a> <?=$l->_("is free software licensed under the")?> <a href="https://github.com/ebinf/debategory/blob/master/LICENSE" target="_blank"><?=$l->_("MIT License")?></a>.</p>
 						<hr />
-						<h3>Changelog</h3>
+						<h3><?=$l->_("Changelog")?></h3>
 						<dl>
 							<?php
 								foreach ($versioning["changelog"] as $version) {
@@ -424,10 +426,10 @@
 						<?=$l->_("A newer version of Debategory has been found. Do you want do download and install it now?")?><br />
 						<b><?=$l->_("The automatic update will take up to a few minutes, depending on your system. The speech list will not be available during that time! Also make sure to backup all important data! The update will clear the speech lists and speech time settings!")?></b>
 						<hr />
-						<h3>What's new</h3>
+						<h3><?=$l->_("What's new")?></h3>
 						<dl>
 							<dt id="updatedialogNew"></dt>
-							<dd><ul id="updatedialogChn"><li><i>Error loading changes.</i></li></ul></dd>
+							<dd><ul id="updatedialogChn"><li><i><?=$l->_("Error loading changes.")?></i></li></ul></dd>
 						<dl>
 					</div>
 					<div class="modal-footer">
