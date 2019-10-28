@@ -9,15 +9,9 @@
         "prio": [],
         "normal": []
     },
-    "timer": {
-        "started": -1,
-        "current": 120
-    },
     "settings": {
-        "title": "Hauptantrag",
+        "title": "Main",
         "main_closed": false,
-        "add_closed": false,
-        "time_minutes": 2,
-        "time_seconds": 0
+        "add_closed": false
     }
 }

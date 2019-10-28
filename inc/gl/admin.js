@@ -5,6 +5,15 @@ admlstprev = "";
 settings = {};
 allowfoc = true;
 timer = null;
+interv = -1;
+
+function l(translatestring) {
+	if (translations == undefined) {
+		return translatestring;
+	} else {
+		return translations[translatestring];
+	}
+}
 
 function asyncreq(varurl, params="") {
 	$.ajax({
@@ -26,11 +35,17 @@ function getConts() {
 		cache: false,
 		success: function(data) {
 			if (JSON.stringify(cache) != JSON.stringify(data)) {
+				if (cache["update"] != undefined && data["update"] == undefined) {
+					location.reload();
+				} else if (data["update"] != undefined) {
+					clearInterval(timer);
+					$("#performupdateDia").modal("show");
+				}
 				cache = data;
 				tabmain(cache["main"]);
 				tabadd(cache["add"]);
 				if (cache["add"]["current"]) {
-					tabprev({"queue": cache["add"], "closed": cache["settings"]["add_closed"], "title": "Änderungsantrag"});
+					tabprev({"queue": cache["add"], "closed": cache["settings"]["add_closed"], "title": additional_title});
 				} else if (cache["main"]["current"]) {
 					if (cache["settings"]["title"].length > 0) {
 						title = cache["settings"]["title"];
@@ -53,16 +68,16 @@ function tabmain(data) {
 	admtabmain = $("#redtab-main > tbody");
 	admtabmain.html("");
 	if (data["current"]) {
-		admtabmain.append('<tr class="table-success"><td>' + data["current"] + '<a onclick="asyncreq(\'?action=finishedmain\');" title="Redebeitrag fertig" class="lnk pull-right"><i class="fa fa-check fa-fw text-success"></i></a></td></tr>');
+		admtabmain.append('<tr class="table-success"><td>' + data["current"] + '<a onclick="asyncreq(\'?action=finishedmain\');" title="' + l("Speech finished") + '" class="lnk pull-right"><i class="fa fa-check fa-fw text-success"></i></a></td></tr>');
 	}
 	for (i in data["prio"]) {
-		admtabmain.append('<tr class="table-primary"><td><i class="fa fa-bolt text-primary" title="Priorisiert"></i>&nbsp;' + data["prio"][i] + '<a onclick="asyncreq(\'?action=delmain&q=prio&id=' + i + '\')" title="Aus Liste entfernen" class="lnk pull-right"><i class="fa fa-trash fa-fw text-danger"></i></a></td></tr>');
+		admtabmain.append('<tr class="table-primary"><td><i class="fa fa-bolt text-primary" title="' + l("Prioritised") + '"></i>&nbsp;' + data["prio"][i] + '<a onclick="asyncreq(\'?action=delmain&q=prio&id=' + i + '\')" title="' + l("Remove from list") + '" class="lnk pull-right"><i class="fa fa-trash fa-fw text-danger"></i></a></td></tr>');
 	}
 	for (i in data["normal"]) {
-		admtabmain.append('<tr><td>' + data["normal"][i] + '<a onclick="asyncreq(\'?action=delmain&q=normal&id=' + i + '\')" title="Aus Liste entfernen" class="lnk pull-right"><i class="fa fa-trash fa-fw text-danger"></i></a><a onclick="asyncreq(\'?action=priomain&id=' + i + '\')" title="Priorisieren" class="lnk pull-right"><i class="fa fa-bolt fa-fw text-primary"></i></a></td></tr>');
+		admtabmain.append('<tr><td>' + data["normal"][i] + '<a onclick="asyncreq(\'?action=delmain&q=normal&id=' + i + '\')" title="' + l("Remove from list") + '" class="lnk pull-right"><i class="fa fa-trash fa-fw text-danger"></i></a><a onclick="asyncreq(\'?action=priomain&id=' + i + '\')" title="' + l("Prioritise") + '" class="lnk pull-right"><i class="fa fa-bolt fa-fw text-primary"></i></a></td></tr>');
 	}
 	if (cache["settings"]["main_closed"]) {
-		admtabmain.append('<tr><td><i class="text-muted" style="text-transform: none;">Redeliste geschlossen.</i><a onclick="asyncreq(\'?action=reopenmain\')" title="Wieder öffnen" class="lnk pull-right"><i class="fa fa-unlock fa-fw text-muted"></i></a></td></tr>');
+		admtabmain.append('<tr><td><i class="text-muted" style="text-transform: none;">' + l("List closed.") + '</i><a onclick="asyncreq(\'?action=reopenmain\')" title="' + l("Reopen") + '" class="lnk pull-right"><i class="fa fa-unlock fa-fw text-muted"></i></a></td></tr>');
 	}
 }
 
@@ -70,16 +85,16 @@ function tabadd(data) {
 	admtabadd = $("#redtab-add > tbody");
 	admtabadd.html("");
 	if (data["current"]) {
-		admtabadd.append('<tr class="table-success"><td>' + data["current"] + '<a onclick="asyncreq(\'?action=finishedadd\');" title="Redebeitrag fertig" class="lnk pull-right"><i class="fa fa-check fa-fw text-success"></i></a></td></tr>');
+		admtabadd.append('<tr class="table-success"><td>' + data["current"] + '<a onclick="asyncreq(\'?action=finishedadd\');" title="' + l("Speech finished") + '" class="lnk pull-right"><i class="fa fa-check fa-fw text-success"></i></a></td></tr>');
 	}
 	for (i in data["prio"]) {
-		admtabadd.append('<tr class="table-primary"><td><i class="fa fa-bolt text-primary" title="Priorisiert"></i>&nbsp;' + data["prio"][i] + '<a onclick="asyncreq(\'?action=deladd&q=prio&id=' + i + '\')" title="Aus Liste entfernen" class="lnk pull-right"><i class="fa fa-trash fa-fw text-danger"></i></a></td></tr>');
+		admtabadd.append('<tr class="table-primary"><td><i class="fa fa-bolt text-primary" title="'+ l("Prioritised") +'"></i>&nbsp;' + data["prio"][i] + '<a onclick="asyncreq(\'?action=deladd&q=prio&id=' + i + '\')" title="' + l("Remove from list") + '" class="lnk pull-right"><i class="fa fa-trash fa-fw text-danger"></i></a></td></tr>');
 	}
 	for (i in data["normal"]) {
-		admtabadd.append('<tr><td>' + data["normal"][i] + '<a onclick="asyncreq(\'?action=deladd&q=normal&id=' + i + '\')" title="Aus Liste entfernen" class="lnk pull-right"><i class="fa fa-trash fa-fw text-danger"></i></a><a onclick="asyncreq(\'?action=prioadd&id=' + i + '\')" title="Priorisieren" class="lnk pull-right"><i class="fa fa-bolt fa-fw text-primary"></i></a></td></tr>');
+		admtabadd.append('<tr><td>' + data["normal"][i] + '<a onclick="asyncreq(\'?action=deladd&q=normal&id=' + i + '\')" title="' + l("Remove from list") + '" class="lnk pull-right"><i class="fa fa-trash fa-fw text-danger"></i></a><a onclick="asyncreq(\'?action=prioadd&id=' + i + '\')" title="' + l("Prioritise") + '" class="lnk pull-right"><i class="fa fa-bolt fa-fw text-primary"></i></a></td></tr>');
 	}
 	if (cache["settings"]["add_closed"]) {
-		admtabadd.append('<tr><td><i class="text-muted" style="text-transform: none;">Redeliste geschlossen.</i><a onclick="asyncreq(\'?action=reopenadd\')" title="Wieder öffnen" class="lnk pull-right"><i class="fa fa-unlock fa-fw text-muted"></i></a></td></tr>');
+		admtabadd.append('<tr><td><i class="text-muted" style="text-transform: none;">' + l("List closed.") + '</i><a onclick="asyncreq(\'?action=reopenadd\')" title="' + l("Reopen") + '" class="lnk pull-right"><i class="fa fa-unlock fa-fw text-muted"></i></a></td></tr>');
 	}
 }
 
@@ -90,13 +105,13 @@ function tabprev(data) {
 		admtabprev.append('<tr><td><h1 class="display-3 activered">' + data["queue"]["current"] + '</h1></td></tr>');
 	}
 	for (i in data["queue"]["prio"]) {
-		admtabprev.append('<tr><td><h1 class="display-3"><i class="fa fa-bolt text-primary" title="Priorisiert"></i>&nbsp;' + data["queue"]["prio"][i] + '</h1></td></tr>');
+		admtabprev.append('<tr><td><h1 class="display-3"><i class="fa fa-bolt text-primary" title="' + l("Prioritised") + '"></i>&nbsp;' + data["queue"]["prio"][i] + '</h1></td></tr>');
 	}
 	for (i in data["queue"]["normal"]) {
 		admtabprev.append('<tr><td><h1 class="display-3">' + data["queue"]["normal"][i] + '</h1></td></tr>');
 	}
 	if (data["closed"]) {
-		admtabprev.append('<tr><td><h1 title="Redeliste geschlossen."><i class="fa fa-lock"></i></h1></td></tr>');
+		admtabprev.append('<tr><td><h1 title="' + l("List closed.") + '"><i class="fa fa-lock"></i></h1></td></tr>');
 	}
 	$("#tit").html(data["title"]);
 }
@@ -116,17 +131,12 @@ function settingschanged(data) {
 			$("#redtimesek").val(0);
 			$("#redtimepanel").hide();
 		}
-		if (settings["wifi_info"] != undefined && settings["wifi_info"]) {
-			$("#actwifi").prop('checked', true);
-		} else {
-			$("#actwifi").prop('checked', false);
-		}
 		if (settings["title"].length > 0) {
 			$("#maintitinp").val(settings["title"]);
 			$("#maintithead").html(settings["title"]);
 		} else {
-			$("#maintitinp").val("Hauptantrag");
-			$("#maintithead").html("Hauptantrag");
+			$("#maintitinp").val(default_list_title);
+			$("#maintithead").html(default_list_title);
 		}
 		toggleredtime();
 	}
@@ -146,12 +156,7 @@ function savesettings() {
 	if ($("#maintitinp").val().length > 0) {
 		titlemain = $("#maintitinp").val();
 	} else {
-		titlemain = "Hauptantrag";
-	}
-	if ($("#actwifi").prop('checked')) {
-		wifi = "true";
-	} else {
-		wifi = "false";
+		titlemain = default_list_title;
 	}
 	if ($("#actredtime").prop('checked')) {
 		if (isNaN(parseInt($("#redtimemin").val()))) {
@@ -161,17 +166,17 @@ function savesettings() {
 			$("#redtimesek").val("0");
 		}
 		if (parseInt($("#redtimemin").val()) > 0 || parseInt($("#redtimesek").val()) > 0) {
-			asyncreq("?action=savesettings", "minutes=" + $("#redtimemin").val() + "&seconds=" + $("#redtimesek").val() + "&title=" + titlemain + "&wifi=" + wifi);
+			asyncreq("?action=savesettings", "minutes=" + $("#redtimemin").val() + "&seconds=" + $("#redtimesek").val() + "&title=" + titlemain);
 		} else {
 			$("#actredtime").prop('checked', true);
 			$("#redtimemin").val("");
 			$("#redtimesek").val("");
 			$("#redtimepanel").hide();
-			asyncreq("?action=savesettings", "title=" + titlemain + "&wifi=" + wifi);
+			asyncreq("?action=savesettings", "title=" + titlemain);
 		}
 		toggleredtime();
 	} else {
-		asyncreq("?action=savesettings", "title=" + titlemain + "&wifi=" + wifi);
+		asyncreq("?action=savesettings", "title=" + titlemain);
 	}
 	getConts();
 }
@@ -271,6 +276,63 @@ function startTime() {
 	$("#timelabel").html(h + ":" + m + ":" + s);
 }
 
+function checkforupdates() {
+	$("#checkforupdatesBtn").hide();
+	$("#checkforupdatesBtnDisabled").show();
+	$.ajax({
+		url: "?action=checkforupdates",
+		async: true,
+		cache: false,
+		method: "GET",
+		complete: function(data) {
+			data = data.responseJSON;
+			if (data["status"] == "error") {
+				if (data["message"] == undefined) {
+					$("#updateerrorLbl").html(l("Unknown error."));
+				} else {
+					$("#updateerrorLbl").html(data["message"]);
+				}
+				$("#updateerrorMsg").show();
+			} else if (data["status"] == "no updates") {
+				$("#noupdateMsg").show();
+			} else {
+				$("#updatedialogNew").html(data["version"]);
+				$("#updatedialogChn").html("");
+				for (var i = 0; i < data["changes"].length; i++) {
+					$("#updatedialogChn").append("<li>" + data["changes"][i] + "</li>");
+				}
+				$("#updateseed").val(data["seed"]);
+				$("#updatedialog").modal("show");
+			}
+			$("#about").modal("hide");
+			$("#checkforupdatesBtn").show();
+			$("#checkforupdatesBtnDisabled").hide();
+		}
+	});
+}
+
+function performupdate() {
+	clearInterval(interv);
+	clearInterval(timer);
+	$("#performupdateDia").modal("show");
+	$.ajax({
+		url: "?action=performupdate&seed=" + $("#updateseed").val(),
+		async: true,
+		cache: false,
+		method: "GET",
+		complete: function(data) {
+			data = data.responseJSON;
+			if (data["status"] == "finished") {
+				location.reload();
+			} else {
+				$("#performupdateLbl").hide();
+				$("#performupdateerrorLbl").append(data["message"]);
+				$("#performupdateerrorLbl").show();
+			}
+		}
+	});
+}
+
 $(document).ready(function() {
-	setInterval(function() { startTime(); getConts(); }, 500);
+	interv = setInterval(function() { startTime(); getConts(); }, 500);
 });

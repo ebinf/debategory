@@ -1,6 +1,6 @@
 <?php
 
-	header("Content-type:application/json");
+	header("Content-type: application/json");
 
 	$queue = json_decode(file_get_contents("queue.json"), true);
 
@@ -22,7 +22,9 @@
 		$time = [];
 	}
 
-	if (isset($queue["add"]) && !empty($queue["add"]["current"])) {
+	if (isset($queue["update"])) {
+		echo json_encode(["update" => true]);
+	} elseif (isset($queue["add"]) && !empty($queue["add"]["current"])) {
 		echo json_encode(["title" => "Änderungsantrag", "queue" => $queue["add"], "closed" => $queue["settings"]["add_closed"], "time" => $time]);
 	} else if (isset($queue["main"]) && !empty($queue["main"]["current"])) {
 		if (isset($queue["settings"]["title"]) && sizeof($queue["settings"]["title"]) > 0) {
@@ -32,7 +34,7 @@
 		}
 		echo json_encode(["title" => $title, "queue" => $queue["main"], "closed" => $queue["settings"]["main_closed"], "time" => $time]);
 	} else {
-		echo json_encode(["wifi_info" => (isset($queue["settings"]["wifi_info"]) ? $queue["settings"]["wifi_info"] : false)]);
+		echo json_encode([]);
 	}
 
 ?>

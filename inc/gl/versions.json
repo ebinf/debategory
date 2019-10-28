@@ -1,0 +1,33 @@
+{
+  "tag": "v1.3",
+  "name": "Version 1.3",
+  "changelog": [
+    {
+      "name": "Version 1.3",
+      "changes": [
+        "Added localisation",
+        "Added automatic update mechanism"
+      ]
+    },
+    {
+      "name": "Version 1.2",
+      "changes": [
+        "Reworked speech time to be server sided",
+        "Reworked storage to use JSON",
+        "Use internal REST-API"
+      ]
+    },
+    {
+      "name": "Version 1.1",
+      "changes": [
+        "Added speech time"
+      ]
+    },
+    {
+      "name": "Version 1.0",
+      "changes": [
+        "Basic functionality"
+      ]
+    }
+  ]
+}
