@@ -1,7 +1,14 @@
 {
-  "tag": "v1.3",
-  "name": "Version 1.3",
+  "tag": "v1.3.5",
+  "name": "Version 1.3.5",
   "changelog": [
+    {
+      "name": "Version 1.3.5",
+      "changes": [
+        "Added self service",
+        "Stay safe!"
+      ]
+    },
     {
       "name": "Version 1.3",
       "changes": [

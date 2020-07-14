@@ -55,5 +55,10 @@
   "What's new": "Neuerungen",
   "Yes, empty list": "Ja, Liste leeren",
   "Your version of Debategory is up to date. There is no need to update.": "Deine Debategory-Version ist aktuell. Ein Update ist nicht notwendig.",
-  "is free software licensed under the": "ist freie Software, lizenziert unter der"
+  "is free software licensed under the": "ist freie Software, lizenziert unter der",
+  "Hello": "Hallo",
+  "Do you also want to say something? Enter your name below and raise your hand virtually.": "Möchtest du auch etwas sagen? Trag unten deinen Namen ein und heb virtuell die Hand.",
+  "Your Name": "Dein Name",
+  "You cannot change your name after submitting.": "Du kannst deinen Namen nach dem Absenden nicht mehr ändern.",
+  "Raise hand": "Hand heben"
 }

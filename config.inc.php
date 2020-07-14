@@ -10,4 +10,5 @@
       "ssid" => "wifi-ssid",
       "psk" => "wifi-psk",
     ),
+    "self_service" => false
   );

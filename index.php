@@ -56,6 +56,42 @@
 				</span>
 			</div>
 		</div>
+		<?php if ($config["self_service"]) {
+			session_start();
+			if (!isset($_SESSION["self_service_name"])) {
+				if (isset($_POST["self_service_name"])) {
+					$_SESSION["self_service_name"] = htmlentities($_POST["self_service_name"]);
+					header("Location: ./");
+					exit();
+				}
+			?>
+				<div class="card col-12 col-lg-4 col-md-7 shadow-lg fixed-bottom m-md-4 ml-md-auto" id="self_service_namein">
+				  <div class="card-body">
+						<button type="button" class="ml-2 mb-1 close" onclick="$('#self_service_namein').fadeOut();">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="card-title"><b><?=$l->_("Hello");?>!</b></h4>
+						<h5 class="card-subtitle mb-2"><?=$l->_("Do you also want to say something? Enter your name below and raise your hand virtually.");?></h5>
+						<form class="form-group" method="POST">
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text" id="basic-addon1"><i class="fa fa-user"></i></span>
+								</div>
+								<input type="text" class="form-control" name="self_service_name" placeholder="<?=$l->_("Your Name");?>">
+							</div>
+							<small class="form-text text-muted"><?=$l->_("You cannot change your name after submitting.");?></small>
+						</form>
+					</div>
+				</div>
+			<?php } else { ?>
+				<div class="card col-7 col-lg-2 col-md-4 shadow-lg fixed-bottom m-4 ml-auto" id="self_service_raisehand">
+					<div class="card-body">
+						<h4 class="card-title"><b><?=$l->_("Hello")?>,</b> <?=$_SESSION["self_service_name"]?>.</h4>
+						<button type="button" class="btn btn-primary" id="raisehand_btn"><i id="raisehand_ico" class="fa fa-hand-paper-o"></i> <?=$l->_("Raise hand");?></button>
+					</div>
+				</div>
+			<?php } ?>
+		<?php } ?>
 		<div class="logo"></div>
 		<script>
 			l_list_closed = "<?=$l->_("List closed.")?>";

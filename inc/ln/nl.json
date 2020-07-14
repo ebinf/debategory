@@ -55,5 +55,10 @@
   "What's new": "Vernieuwingen",
   "Yes, empty list": "Ja, lijst leegmaken",
   "Your version of Debategory is up to date. There is no need to update.": "Je Debategory versie is up-to-date. Een update is niet nodig.",
-  "is free software licensed under the": "is vrije software onder de"
+  "is free software licensed under the": "is vrije software onder de",
+  "Hello": "Hoi",
+  "Do you also want to say something? Enter your name below and raise your hand virtually.": "Wil je iets zeggen? Vul hieronder je naam in en steek je hand virtueel op.",
+  "Your Name": "Je Naam",
+  "You cannot change your name after submitting.": "Je kunt je naam niet veranderen na het versturen.",
+  "Raise hand": "Hand opsteken"
 }
